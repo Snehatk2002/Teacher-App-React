@@ -1,8 +1,26 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import Navbar from './Navbar'
+import axios from 'axios'
 
 const ViewTeacher = () => {
+    const [data, changedata] = useState([])
+    const fetchData=()=>{
+        axios.post("http://localhost:8080/view",data).then(
+            (response)=>{
+                console.log(response.data)
+                changedata(response.data)
+            }
+        ).catch(
+            (error)=>{
+                console.log(error.message)
+            }
+        ).finally()
+
+    }
+    useEffect(()=>{fetchData()},[])
     return (
         <div>
+            <Navbar/>
             <div className="conatiner">
                 <div className="row">
                     <div className="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
@@ -19,15 +37,19 @@ const ViewTeacher = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                    <td>@mdo</td>
-                                    <td>@mdo</td>
-                                    <td>@mdo</td>
-                                </tr>
+                                {data.map(
+                                    (value,index)=>{
+                                        return <tr>
+                                        <th scope="row">{value.teacherid}</th>
+                                        <td>{value.teachername}</td>
+                                        <td>{value.emailid}</td>
+                                        <td>{value.mobile}</td>
+                                        <td>{value.address}</td>
+                                        <td>{value.salary}</td>
+                                        <td>{value.subject}</td>
+                                    </tr>
+                                    }
+                                )}
 
                             </tbody>
                         </table>
